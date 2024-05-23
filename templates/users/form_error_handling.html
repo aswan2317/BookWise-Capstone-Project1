@@ -1,0 +1,4 @@
+{% for error in field.errors %}
+    <span class="text-danger">{{ error }}</span>
+    flash("Something went wrong", "danger")
+{% endfor %}

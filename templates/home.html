@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <aside class="col-md-4 col-lg-3 col-sm-12" id="home-aside">
+        <div class="card user-card">
+            <div>
+                <div class="image-wrapper">
+                    <img src="{{ g.user.header_image_url }}" alt="" class="card-hero">
+                </div>
+                <a href="{{ url_for('users_show', user_id=g.user.id) }}" class="card-link">
+                    <img src="{{ g.user.image_url }}" alt="{{ g.user.username }}" class="card-image">
+                    <p>@{{ g.user.username }}</p>
+                </a>
+                <ul class="user-stats nav nav-pills">
+                    <li class="stat">
+                        <p class="small">Books Liked</p>
+                        <h4>
+                            <a href="{{ url_for('like_book', book_id=g.user.id) }}">
+                                <span class="sr-only">Books Liked: </span>{{ g.user.liked_books | length }}
+                            </a>
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </aside>
+
+    <div class="col-md-8 col-lg-9 col-sm-12">
+        <ul class="list-group" id="books">
+            {% for book in g.user.like_books %}
+            <li class="list-group-item">
+                <a href="{{ url_for('book_details', book_id=book.id) }}" class="book-link">
+                    <span class="sr-only">Details for {{ book.title }}</span>
+                    {{ book.title }}
+                </a>
+                <div class="book-info">
+                    <p>Author: {{ book.author }}</p>
+                    <p>Published: {{ book.published_date }}</p>
+                </div>
+                <form method="POST" action="{{ url_for('toggle_book_like', book_id=book.id) }}" id="like-book-form">
+                    <button class="btn btn-sm {% if book in g.user.like_books %}btn-primary{% else %}btn-secondary{% endif %}">
+                        {% if book in g.user.like_books %}
+                        Unlike
+                        {% else %}
+                        Like
+                        {% endif %}
+                    </button>
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

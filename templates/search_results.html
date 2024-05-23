@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Search Results</h2>
+        {% if books %}
+            <div class="row">
+                {% for book in books %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ book.volumeInfo.title }}</h5>
+                                <p class="card-text">{{ book.volumeInfo.description|truncate(200) }}</p>
+                                <p class="card-text">Author: {{ book.volumeInfo.authors|join(', ') }}</p>
+                                <p class="card-text">Publisher: {{ book.volumeInfo.publisher }}</p>
+                                <p class="card-text">Published Date: {{ book.volumeInfo.publishedDate }}</p>
+                                <p class="card-text">Page Count: {{ book.volumeInfo.pageCount }}</p>
+                                <a href="{{ book.volumeInfo.previewLink }}" class="btn btn-primary">Preview</a>
+                                <a href="{{ book.volumeInfo.infoLink }}" class="btn btn-secondary">More Info</a>
+                                {% if book in curr_user.liked_books %}
+                                    <form method="POST" action="{{ url_for('unlike_book', book_id=book.id) }}">
+                                        <button type="submit" class="btn btn-danger">Unlike</button>
+                                    </form>
+                                {% else %}
+                                    <form method="POST" action="{{ url_for('like_book', book_id=book.id) }}">
+                                        <button type="submit" class="btn btn-success">Like</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="lead">No books found for your search.</p>
+        {% endif %}
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

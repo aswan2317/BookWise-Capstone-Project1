@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta chars/home/aswan2317/school/BookWise/templateset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <!-- Include any necessary CSS files here -->
+</head>
+<body>
+    <h1>User Profile</h1>
+    <div>
+        <h2>{{ user.username }}</h2>
+        <p>Email: {{ user.email }}</p>
+        <!-- Add any other user information you want to display here -->
+    </div>
+    <div>
+        <h3>Books Liked:</h3>
+        <ul>
+            {% for book in user.liked_books %}
+                <li>{{ book.title }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <!-- Add any other sections or content you want to include here -->
+</body>
+</html>

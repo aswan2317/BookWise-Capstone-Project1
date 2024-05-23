@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <img src="{{ book.cover_image_url }}" alt="Book Cover" class="img-fluid" 
+                     onerror="this.src='{{ url_for('static', filename='default_book_cover.jpg') }}'">
+            </div>
+            <div class="col-md-8">
+                <h1>{{ book.title }}</h1>
+                <p class="lead">By {{ book.author }}</p>
+
+                <ul class="list-group">
+                    <li class="list-group-item">Published Date: {{ book.published_date | default('N/A') }}</li>
+                    <li class="list-group-item">Page Count: {{ book.page_count }}</li>
+                    <li class="list-group-item">Categories: {{ book.categories | join(', ') }}</li>
+                    <li class="list-group-item">Average Rating: {{ book.average_rating }}/5</li>
+                    <li class="list-group-item">Ratings Count: {{ book.ratings_count }}</li>
+                    <li class="list-group-item">Maturity Rating: {{ book.maturity_rating }}</li>
+                </ul>
+
+                <div class="mt-3">
+                    <!-- Like/unlike form -->
+                    <form action="{{ url_for('like_book', book_id=book.id) }}" method="post">
+                        {% if book.is_liked_by(g.user) %}
+                            <button type="submit" class="btn btn-danger">Unlike</button>
+                        {% else %}
+                            <button type="submit" class="btn btn-primary">Like</button>
+                        {% endif %}
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    </form>
+                </div>
+
+                <hr>
+
+                <!-- Review Section -->
+                <h3>Reviews</h3>
+                <ul class="list-group">
+                    {% for review in book.reviews %}
+                        <li class="list-group-item">
+                            <strong><a href="{{ url_for('users_show', user_id=review.user.id) }}">{{ review.user.username }}</a></strong>
+                            - {{ review.rating }}/5
+                            <p>{{ review.text }}</p>
+                            <p class="text-muted">Reviewed on {{ review.created_at }}</p> 
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                <!-- Add Review Button -->
+                <a href="{{ url_for('add_review', book_id=book.id) }}" class="btn btn-secondary">Add Review</a>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
