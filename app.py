@@ -84,7 +84,6 @@ def homepage():
 
     else:
         return render_template('home-anon.html')
-    
 ####################################################################
 # User Signup route..
 
@@ -248,25 +247,23 @@ def book_details(book_id):
 
 ######################################################## Route for liking and unliking book...
 
-@app.route('/like/<book_id>', methods=['GET', 'POST'])
+@app.route('/like/<book_id>', methods=['POST'])
 @redirect_if_missing
 def like_book(book_id):
     """Like a book."""
-    if request.method == 'POST':  # Ensure only POST requests are allowed
-        try:
-            book = Book.query.filter_by(google_books_id=book_id).first_or_404()
-            if book:
-                like = Likes(user_id=g.user.id, book_id=book.id)
-                db.session.add(like)
-                db.session.commit()
-                flash(f"You liked '{book.title}'.", "success")
-                print(f"User {g.user.username} liked the book: {book.title}")
-        except SQLAlchemyError as e:
-            db.session.rollback()  # Rollback any changes made to the database session
-            flash("An error occurred while liking the book. Please try again later.", "error")
-            app.logger.error(f"Error liking book: {e}")  # Log the error for debugging purposes
+    try:
+        book = Book.query.filter_by(google_books_id=book_id).first_or_404()
+        if book:
+            like = Likes(user_id=g.user.id, book_id=book.id)
+            db.session.add(like)
+            db.session.commit()
+            flash(f"You liked '{book.title}'.", "success")
+            print(f"User {g.user.username} liked the book: {book.title}")
+    except SQLAlchemyError as e:
+        db.session.rollback()  # Rollback any changes made to the database session
+        flash("An error occurred while liking the book. Please try again later.", "error")
+        app.logger.error(f"Error liking book: {e}")  # Log the error for debugging purposes
     return redirect(request.referrer or '/')
-
 
 
 @app.route('/unlike/<book_id>', methods=['POST'])
@@ -281,6 +278,7 @@ def unlike_book(book_id):
         print(f"User {g.user.username} unliked the book with ID {book_id}")
     return redirect(request.referrer or '/')
 
+
 ############################################ Route for adding a review...
 @app.route('/review/<book_id>', methods=['GET', 'POST'])
 @redirect_if_missing
@@ -293,14 +291,14 @@ def add_review(book_id):
     if form.validate_on_submit():
         review = Review(
             rating=form.rating.data,
-            text=form.text.data,
+            text=form.comment.data,  # Update to match your ReviewForm
             user_id=g.user.id,
             book_id=book.id
         )
         db.session.add(review)
         db.session.commit()
         flash("Your review has been added.", "success")
-        return redirect(url_for('book_detail', book_id=book_id))
+        return redirect(url_for('book_details', book_id=book_id))
 
     return render_template('review.html', form=form, book=book)
 

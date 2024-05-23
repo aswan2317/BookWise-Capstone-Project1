@@ -1,11 +1,18 @@
-<!-- Review form -->
-<form method="post">
-    {{ form.hidden_tag() }}
-    <div class="form-group">
-        {{ form.rating.label }} {{ form.rating(class="form-control") }}
-    </div>
-    <div class="form-group">
-        {{ form.text.label }} {{ form.text(class="form-control") }}
-    </div>
-    <button type="submit" class="btn btn-primary">Submit Review</button>
-</form>
+{% extends 'base.html' %}
+{% block content %}
+  <div class="container mt-4">
+    <h2>Review for {{ book.title }}</h2>
+    <form method="POST">
+      {{ form.hidden_tag() }}
+      <div class="form-group">
+        {{ form.rating.label(class="form-label") }}
+        {{ form.rating(class="form-control") }}
+      </div>
+      <div class="form-group">
+        {{ form.comment.label(class="form-label") }}
+        {{ form.comment(class="form-control") }}
+      </div>
+      <button type="submit" class="btn btn-primary">{{ form.submit.label }}</button>
+    </form>
+  </div>
+{% endblock %}

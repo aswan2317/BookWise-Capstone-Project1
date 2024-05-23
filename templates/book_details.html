@@ -10,7 +10,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4">
-                <img src="{{ book.cover_image_url }}" alt="Book Cover" class="img-fluid" 
+                <img src="{{ book.cover_image_url }}" alt="Book Cover" class="img-fluid"
                      onerror="this.src='{{ url_for('static', filename='default_book_cover.jpg') }}'">
             </div>
             <div class="col-md-8">
@@ -48,7 +48,7 @@
                             <strong><a href="{{ url_for('users_show', user_id=review.user.id) }}">{{ review.user.username }}</a></strong>
                             - {{ review.rating }}/5
                             <p>{{ review.text }}</p>
-                            <p class="text-muted">Reviewed on {{ review.created_at }}</p> 
+                            <p class="text-muted">Reviewed on {{ review.created_at }}</p>
                         </li>
                     {% endfor %}
                 </ul>
