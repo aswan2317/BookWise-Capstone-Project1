@@ -50,7 +50,10 @@
         <ul class="list-group" id="reviews">
             {% for review in reviews %}
             <li class="list-group-item">
-                <strong>{{ review.book.title }}</strong>
+                <a href="https://books.google.com/books?id={{ review.book.google_books_id }}" target="_blank" class="book-link">
+                    <span class="sr-only">Details for {{ review.book.title }}</span>
+                    {{ review.book.title }}
+                </a>
                 <p>{{ review.rating }}/5</p>
                 <p>{{ review.text }}</p>
                 <p class="text-muted">Reviewed on {{ review.created_at }}</p>
