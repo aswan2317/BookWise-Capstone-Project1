@@ -166,7 +166,7 @@ def search_books():
                         average_rating=volume_info.get('averageRating', 0),
                         ratings_count=volume_info.get('ratingsCount', 0),
                         maturity_rating=volume_info.get('maturityRating', 'N/A'),
-                        preview_link=volume_info.get('previewLink', '#'),
+                        preview_link=volume_info.get('pbiewLink', '#'),
                         thumbnail=volume_info.get('imageLinks', {}).get('thumbnail', '#')
                     )
                     db.session.add(book)
