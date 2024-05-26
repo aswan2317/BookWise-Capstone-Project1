@@ -26,6 +26,7 @@ class Book(db.Model):
 
     # Relationships
     reviews = db.relationship('Review', backref='book', cascade='all, delete-orphan')
+    liking_users = db.relationship('Likes', back_populates='book')
 
     def __repr__(self):
         return f"<Book {self.id}: {self.title}>"
@@ -61,20 +62,17 @@ class Review(db.Model):
 
 class Likes(db.Model):
     """Mapping user likes to books."""
-
     __tablename__ = 'likes'
 
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='cascade'))
-    book_id = db.Column(db.Integer, db.ForeignKey('books.id', ondelete='cascade'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    book_id = db.Column(db.Integer, db.ForeignKey('books.id'), primary_key=True)
 
-    # Define back references if needed
-    user = db.relationship('User', backref=db.backref('liked_books', cascade='all, delete'))
-    book = db.relationship('Book', backref='liking_users', cascade='all, delete')
+    # Relationships
+    user = db.relationship('User', back_populates='liked_books')
+    book = db.relationship('Book', back_populates='liking_users')
 
 class User(db.Model):
     """User in the system."""
-
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -83,15 +81,12 @@ class User(db.Model):
     image_url = db.Column(db.Text, default="/static/images/default-pic.png")
     header_image_url = db.Column(db.Text, default="/static/images/warbler-hero.jpg")
     password = db.Column(db.Text, nullable=False)
+    liked_books = db.relationship('Likes', back_populates='user')
 
     @classmethod
     def signup(cls, username, email, password, image_url, header_image_url):
-        """Sign up user.
-        Hashes password and adds user to system.
-        """
-
+        """Sign up user. Hashes password and adds user to system."""
         hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
-
         user = User(
             username=username,
             email=email,
@@ -99,16 +94,13 @@ class User(db.Model):
             image_url=image_url,
             header_image_url=header_image_url,
         )
-
         db.session.add(user)
         return user
 
     @classmethod
     def authenticate(cls, username, password):
         """Authenticate user."""
-
         user = cls.query.filter_by(username=username).first()
-
         if user:
             is_auth = bcrypt.check_password_hash(user.password, password)
             if is_auth:

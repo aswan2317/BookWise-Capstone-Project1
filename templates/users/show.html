@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta chars/home/aswan2317/school/BookWise/templateset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
     <!-- Include any necessary CSS files here -->
@@ -16,10 +16,23 @@
     <div>
         <h3>Books Liked:</h3>
         <ul>
-            {% for book in user.liked_books %}
-                <li>{{ book.title }}</li>
+            {% for like in user.liked_books %}
+                <li>
+                    {{ like.book.title }}
+                    <a href="https://books.google.com/books?id={{ like.book.google_books_id }}" target="_blank">
+                        <button>View on Google Books</button>
+                    </a>
+                </li>
             {% endfor %}
         </ul>
+    </div>
+    <div>
+        <a href="{{ url_for('homepage') }}">
+            <button>Back to Homepage</button>
+        </a>
+        <a href="{{ url_for('profile') }}">
+            <button>Edit Profile</button>
+        </a>
     </div>
     <!-- Add any other sections or content you want to include here -->
 </body>
