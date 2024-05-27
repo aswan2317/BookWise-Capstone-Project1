@@ -6,16 +6,16 @@
   <title>BookWise</title>
 
   <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
 
   <!-- Custom CSS -->
-  <link rel="stylesheet" href="/static/stylesheets/style.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/style.css') }}">
 
   <!-- Favicon -->
-  <link rel="shortcut icon" href="/static/favicon.ico">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 
 <body class="{% block body_class %}{% endblock %}">
@@ -24,7 +24,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
     <a class="navbar-brand" href="/">
-      <img src="/static/images/bookwise-logo.png" alt="logo">
+      <img src="{{ url_for('static', filename='images/bookwise-logo.png') }}" alt="logo">
       <span>BookWise</span>
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -35,12 +35,13 @@
       <ul class="navbar-nav mr-auto">
         <!-- Add additional navigation links here if needed -->
       </ul>
-      <!-- Search Form -->
-      <form class="form-inline my-2 my-lg-0 mr-3" action="/search">
+      {% if g.user %}
+      <!-- Search Form for Logged-in Users -->
+      <form class="form-inline my-2 my-lg-0 mr-3" action="/search" method="GET">
         <input class="form-control mr-sm-2" type="search" placeholder="Search BookWise" aria-label="Search" name="q">
         <button class="btn btn-outline-light my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
       </form>
-      <!-- User Authentication Links -->
+      {% endif %}
       <ul class="navbar-nav ml-auto">
         {% if not g.user %}
         <li class="nav-item"><a class="nav-link" href="/signup">Sign up</a></li>
@@ -69,11 +70,10 @@
   {% endblock %}
 </div>
 
-<!-- Bootstrap JS (optional, if you need JavaScript features) -->
-<script src="https://unpkg.com/jquery"></script>
-<script src="https://unpkg.com/popper"></script>
-<script src="https://unpkg.com/bootstrap"></script>
+<!-- jQuery, Popper.js, and Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
-
 </html>

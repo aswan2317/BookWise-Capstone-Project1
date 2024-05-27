@@ -1,22 +1,37 @@
+/* stylesheets/style.css */
+
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
 /* ====================== General */
 
 body {
-  background-color: #e6ecf0;
+  background-color: #f4f7fa;
+  font-family: 'Roboto', sans-serif;
+  color: #333;
 }
 
 body.error-404 {
-  background-color: #1da1f2;
+  background-color: #ff6b6b;
 }
 
 .form-control {
   margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
 }
 
 .btn {
-  border-radius: 50px;
+  border-radius: 8px;
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  transition: background-color 0.3s ease;
 }
 
 .btn:hover {
+  background-color: #0056b3;
   cursor: pointer;
 }
 
@@ -24,21 +39,23 @@ body.error-404 {
 
 .navbar {
   background-color: #fff;
-  height: 46px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+  height: 60px;
+  border-bottom: 2px solid #007bff;
   margin-bottom: 1rem;
   position: relative;
   z-index: 9999;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .navbar a {
-  color: #66757f;
-  font-size: 13px;
+  color: #007bff;
+  font-size: 16px;
   font-weight: bold;
+  padding: 15px;
 }
 
 .navbar a:hover {
-  color: #1c94e0;
+  color: #0056b3;
 }
 
 .navbar-brand {
@@ -48,9 +65,8 @@ body.error-404 {
 
 .navbar-brand > img {
   display: inline-block;
-  margin-bottom: 2px;
-  margin-right: 5px;
-  width: 20px;
+  margin-right: 10px;
+  width: 30px;
   border-radius: 2px;
 }
 
@@ -65,7 +81,7 @@ ul.nav.navbar-nav {
 }
 
 ul.nav.navbar-nav li {
-  margin: 0 0.5rem;
+  margin: 0 1rem;
   display: flex;
 }
 
@@ -78,19 +94,21 @@ nav form.navbar-form {
   border-radius: 20px;
   margin-bottom: 0;
   width: 100%;
-  font-size: 13px;
-  padding-right: 28px;
+  font-size: 14px;
+  padding-right: 36px;
   box-sizing: border-box;
 }
 
 #search.form-control + .btn {
   position: absolute;
   right: 9px;
-  top: 2px;
-  bottom: 4px;
+  top: 6px;
+  bottom: 6px;
   z-index: 1;
   padding: 0;
-  color: #66757f;
+  color: #007bff;
+  background-color: transparent;
+  border: none;
 }
 
 #search.form-control + .btn:active,
@@ -100,18 +118,14 @@ nav form.navbar-form {
 
 #search:active,
 #search:focus {
-  box-shadow: none;
-  border: 2px solid #007bff;
+  box-shadow: 0 0 0 2px #007bff;
+  border-color: #007bff;
 }
 
-/* on "onboarding" pages (signup & login), the navbar is
-   different: no search box, the logo is centered, and it has
-   a background color.
- */
+/* Onboarding pages (signup & login), different navbar style */
 
 .onboarding > .navbar {
-  background-image: url("/static/images/nav-bg.png");
-  background-size: 100% 100%;
+  background-color: #007bff;
 }
 
 .onboarding .navbar-header {
@@ -120,6 +134,7 @@ nav form.navbar-form {
 
 .onboarding .navbar-brand {
   margin: 0;
+  color: white;
 }
 
 .onboarding .navbar-brand span {
@@ -157,6 +172,9 @@ nav + .container {
 
 .join-message {
   margin-top: 100px;
+  font-size: 24px;
+  text-align: center;
+  color: #007bff;
 }
 
 #profile-header-image {
@@ -167,9 +185,8 @@ nav + .container {
 
 #profile-image,
 #profile-avatar {
-  border-radius: 100%;
+  border-radius: 50%;
   display: block;
-  margin-left: -15px;
 }
 
 #profile-image {
@@ -188,7 +205,7 @@ nav + .container {
 }
 
 .timeline-image {
-  border-radius: 48px;
+  border-radius: 50%;
   height: 48px;
   width: 48px;
   margin-top: 2px;
@@ -226,7 +243,7 @@ nav + .container {
   margin-bottom: 1rem;
   border-bottom: 1px solid #ccc;
   border-top: 1px solid #ccc;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.25);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
   height: 60px;
   align-items: center;
 }
@@ -263,7 +280,6 @@ nav + .container {
   padding-top: 3px;
 }
 
-
 #sidebar-username {
   margin-top: 30px;
   font-size: 21px;
@@ -287,11 +303,12 @@ nav + .container {
 .user-card {
   width: 100%;
   padding-bottom: 100%;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  border-radius: 8px;
+  border: 1px solid #ddd;
   position: relative;
   background: white;
   margin-top: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .user-card > div {
@@ -306,8 +323,8 @@ nav + .container {
 
 .user-card form .btn {
   min-width: 89px;
-  padding: 4px 12px;
-  font-size: 12px;
+  padding: 6px 12px;
+  font-size: 14px;
 }
 
 .card-hero {
@@ -321,7 +338,7 @@ nav + .container {
 
 .card-image {
   border: 3px solid #fff;
-  border-radius: 70px;
+  border-radius: 50%;
   height: 70px;
   width: 70px;
   margin-top: -35px;
@@ -383,7 +400,7 @@ p.card-bio {
   color: #fff;
   text-align: center;
   padding: 1rem;
-  text-shadow: 0 0 8px #66757f;
+  text-shadow: 0 0 8px #333;
 }
 
 .home-hero .btn {
@@ -395,6 +412,7 @@ p.card-bio {
 
 .home-hero h1 {
   margin-bottom: 4rem;
+  font-size: 3rem;
 }
 
 .home-hero:before {
@@ -404,7 +422,7 @@ p.card-bio {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.5);
 }
 
 /* ============================== Signed in Home */
@@ -500,17 +518,17 @@ p.card-bio {
 }
 
 .flash.success {
-  background-color: #61e08b; 
+  background-color: #28a745; 
 }
 
 .flash.error {
-  background-color: #e07161;
+  background-color: #dc3545;
 }
 
 .flash.info {
-  background-color: #6161e0;
+  background-color: #17a2b8;
 }
 
 .flash.warning {
-  background-color: #e0e061;
+  background-color: #ffc107;
 }
