@@ -1,39 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
-    <!-- Include any necessary CSS files here -->
-</head>
-<body>
-    <h1>User Profile</h1>
-    <div>
+{% extends "base.html" %}
+
+{% block title %}User Profile{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="profile-container">
         <h2>{{ user.username }}</h2>
+        <img src="{{ g.user.image_url }}" alt="{{ g.user.username }}" class="rounded-circle" style="width:200px; height: 200px;">
         <p>Email: {{ user.email }}</p>
         <!-- Add any other user information you want to display here -->
+        <a href="{{ url_for('profile') }}" class="btn btn-primary">Edit Profile</a>
     </div>
-    <div>
+    <div class="books-liked">
         <h3>Books Liked:</h3>
         <ul>
             {% for like in user.liked_books %}
                 <li>
                     {{ like.book.title }}
-                    <a href="https://books.google.com/books?id={{ like.book.google_books_id }}" target="_blank">
-                        <button>View on Google Books</button>
-                    </a>
+                    <a href="https://books.google.com/books?id={{ like.book.google_books_id }}" target="_blank" class="btn btn-secondary">View on Google Books</a>
                 </li>
             {% endfor %}
         </ul>
     </div>
-    <div>
-        <a href="{{ url_for('homepage') }}">
-            <button>Back to Homepage</button>
-        </a>
-        <a href="{{ url_for('profile') }}">
-            <button>Edit Profile</button>
-        </a>
-    </div>
-    <!-- Add any other sections or content you want to include here -->
-</body>
-</html>
+{% endblock %}

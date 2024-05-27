@@ -4,9 +4,9 @@
 <div class="container">
     <h1>Search Books</h1>
     <form method="POST" action="{{ url_for('search_books') }}">
-        {{ form.hidden_tag() }}  
+        {{ form.hidden_tag() }}
         <div class="form-group">
-            {{ form.keyword.label }} 
+            {{ form.keyword.label }}
             {{ form.keyword(class="form-control", placeholder="Enter keyword") }}
             {% for error in form.keyword.errors %}
                 <span class="text-danger">{{ error }}</span>

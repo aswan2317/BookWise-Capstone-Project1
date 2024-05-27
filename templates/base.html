@@ -35,13 +35,16 @@
       <ul class="navbar-nav mr-auto">
         <!-- Add additional navigation links here if needed -->
       </ul>
+
       {% if g.user %}
       <!-- Search Form for Logged-in Users -->
-      <form class="form-inline my-2 my-lg-0 mr-3" action="/search" method="GET">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search BookWise" aria-label="Search" name="q">
-        <button class="btn btn-outline-light my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
-      </form>
+      {% if request.path == '/' %}
+          <button class="btn-link" onclick="window.location.href='/search';">Search Books</button>
+      {% else %}
+          <button class="btn-link" onclick="window.location.href='/';">Home</button>
       {% endif %}
+      {% endif %}
+
       <ul class="navbar-nav ml-auto">
         {% if not g.user %}
         <li class="nav-item"><a class="nav-link" href="/signup">Sign up</a></li>

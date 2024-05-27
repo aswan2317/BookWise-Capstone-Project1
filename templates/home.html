@@ -41,7 +41,6 @@
                 <form method="POST" action="{{ url_for('unlike_book', book_id=book.id) }}" id="like-book-form" style="display:inline;">
                     <button class="btn btn-sm btn-primary">Unlike</button>
                 </form>
-                <a href="{{ url_for('add_review', book_id=book.id) }}" class="btn btn-sm btn-secondary" style="display:inline;">Add Review</a>
             </li>
             {% endfor %}
         </ul>
@@ -57,7 +56,7 @@
                 <p>{{ review.rating }}/5</p>
                 <p>{{ review.text }}</p>
                 <p class="text-muted">Reviewed on {{ review.created_at }}</p>
-                <a href="{{ url_for('edit_review', review_id=review.id) }}" class="btn btn-sm btn-secondary">Edit</a>
+                <a href="{{ url_for('edit_review', review_id=review.id) }}" class="btn btn-sm btn-secondary">Edit Review</a>
                 <form method="POST" action="{{ url_for('delete_review', review_id=review.id) }}" style="display:inline;">
                     <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                 </form>
