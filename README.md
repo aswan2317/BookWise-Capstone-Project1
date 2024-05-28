@@ -2,8 +2,9 @@
 
 ## Project Overview
 
-BookWise is a comprehensive book recommendation and review platform designed to enhance the reading experience.
+BookWise is a book recommendation and review platform designed to enhance the reading experience.
 Users can search for books, read detailed information about them, like and review books, and manage their profile.
+A user can even view and buy a book on Google. 
 
 ## Deployed URL
 
