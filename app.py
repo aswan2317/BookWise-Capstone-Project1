@@ -5,7 +5,7 @@ import requests
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
 from forms import UserAddForm, LoginForm, UserEditForm, BookSearchForm, ReviewForm
-from models import db, connect_db, User, Book, Review, Author, Genre, Likes
+from models import db, connect_db, User, Book, Review, Likes
 from functools import wraps
 
 CURR_USER_KEY = 'curr_user'

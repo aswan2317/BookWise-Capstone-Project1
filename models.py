@@ -79,7 +79,7 @@ class User(db.Model):
     username = db.Column(db.Text, nullable=False, unique=True)
     email = db.Column(db.Text, nullable=False, unique=True)
     image_url = db.Column(db.Text, default="/static/images/default-pic.png")
-    header_image_url = db.Column(db.Text, default="/static/images/warbler-hero.jpg")
+    header_image_url = db.Column(db.Text, default="/static/images/bookwise.jpg")
     password = db.Column(db.Text, nullable=False)
     liked_books = db.relationship('Likes', back_populates='user')
 
