@@ -1,12 +1,11 @@
 import os
-
 from flask import Flask, render_template, request, flash, redirect, session, g, url_for
 import requests
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
-
 from forms import UserAddForm, LoginForm, UserEditForm, BookSearchForm, ReviewForm
 from models import db, connect_db, User, Book, Review, Likes
 from functools import wraps
+from datetime import datetime
 
 CURR_USER_KEY = 'curr_user'
 
@@ -48,6 +47,14 @@ def redirect_if_missing(func):
             return redirect("/")
         return func(*args, **kwargs)
     return wrapper
+
+# Register the datetimeformat filter
+@app.template_filter('datetimeformat')
+def datetimeformat(value, format='%Y-%m-%d %H:%M:%S'):
+    if value is None:
+        return ""
+    return value.strftime(format)
+
 
 @app.route('/')
 def homepage():
@@ -166,7 +173,7 @@ def search_books():
                         average_rating=volume_info.get('averageRating', 0),
                         ratings_count=volume_info.get('ratingsCount', 0),
                         maturity_rating=volume_info.get('maturityRating', 'N/A'),
-                        preview_link=volume_info.get('pbiewLink', '#'),
+                        preview_link=volume_info.get('previewLink', '#'),
                         thumbnail=volume_info.get('imageLinks', {}).get('thumbnail', '#')
                     )
                     db.session.add(book)
@@ -175,6 +182,11 @@ def search_books():
                     except IntegrityError:
                         db.session.rollback()
                 books.append(book)
+
+            # Store the search keyword and results in the session
+            session['search_keyword'] = keyword
+            session['search_results'] = [book.id for book in books]
+
             return render_template('search_results.html', books=books, curr_user=g.user)
         except requests.exceptions.Timeout as e:
             flash(f"Request timed out: {e}", "warning")
@@ -183,13 +195,6 @@ def search_books():
             flash(f"Failed to fetch book data: {e}", "danger")
             return render_template('search.html', form=form)
     return render_template('search.html', form=form)
-
-@app.route('/book/<int:book_id>')
-def book_details(book_id):
-    """Display details of a book."""
-    book = Book.query.get_or_404(book_id)
-    print(f"Displaying details for book: {book.title}")
-    return render_template('book_details.html', book=book)
 
 @app.route('/like/<int:book_id>', methods=['POST'])
 @redirect_if_missing
@@ -206,7 +211,17 @@ def like_book(book_id):
         db.session.rollback()
         flash("An error occurred while liking the book. Please try again later.", "error")
         app.logger.error(f"Error liking book: {e}")
-    return redirect(request.referrer or '/')
+
+    # Retrieve the search keyword and results from the session
+    search_keyword = session.get('search_keyword')
+    search_results = session.get('search_results')
+
+    # Retrieve books from the database using the stored IDs
+    books = Book.query.filter(Book.id.in_(search_results)).all()
+
+    # Render the search results template with the previous search keyword and results
+    return render_template('search_results.html', keyword=search_keyword, books=books, curr_user=g.user)
+
 
 @app.route('/unlike/<int:book_id>', methods=['POST'])
 @redirect_if_missing

@@ -590,6 +590,14 @@ p.card-bio {
   margin-bottom: 1rem;
 }
 
+.book-cover {
+  max-width: 150px;
+  max-height: 200px; 
+  width: auto;
+  height: auto;
+}
+
+
 .books-liked {
   margin-top: 2rem;
 }

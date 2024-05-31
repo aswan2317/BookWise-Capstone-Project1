@@ -1,37 +1,60 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
 <div class="container">
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="alert-container">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+            <script>
+                // Auto-dismiss flash messages after 5 seconds
+                setTimeout(function() {
+                    var alerts = document.querySelectorAll('.alert');
+                    alerts.forEach(function(alert) {
+                        alert.classList.remove('show');
+                        alert.classList.add('fade');
+                    });
+                }, 5000);
+            </script>
+        {% endif %}
+    {% endwith %}
+
     <h2>BOOKS:</h2>
     {% if books %}
         <div class="row">
             <!-- Collect liked book IDs in a variable -->
             {% set liked_books_ids = curr_user.liked_books | map(attribute='id') | list %}
             {% for book in books %}
-                <div class="col-md-4 mb-4">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ book.title }}</h5>
-                            <p class="card-text">{{ book.description or 'No description available' | truncate(200) }}</p>
-                            <p class="card-text">Author: {{ book.author | default('Unknown') }}</p>
-                            <p class="card-text">Publisher: {{ book.publisher | default('Unknown') }}</p>
-                            <p class="card-text">Published Date: {{ book.published_date | default('Unknown') }}</p>
-                            <p class="card-text">Page Count: {{ book.page_count | default('N/A') }}</p>
-                            <a href="{{ book.preview_link | default('#') }}" class="btn btn-primary">Preview</a>
-                            <a href="{{ book.info_link | default('#') }}" class="btn btn-secondary">More Info</a>
-                            {% if book.id in liked_books_ids %}
-                                <form method="POST" action="{{ url_for('unlike_book', book_id=book.id) }}" style="display:inline;">
-                                    <button type="submit" class="btn btn-danger">Unlike</button>
-                                </form>
-                            {% else %}
-                                <form method="POST" action="{{ url_for('like_book', book_id=book.id) }}" style="display:inline;">
-                                    <button type="submit" class="btn btn-success">Like</button>
-                                </form>
-                            {% endif %}
-                            <a href="{{ url_for('add_review', book_id=book.id) }}" class="btn btn-secondary">Add Review</a>
-                        </div>
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm">
+                    <img src="{{ book.thumbnail }}" alt="Book Cover" class="card-img-top book-cover">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ book.title }}</h5>
+                        <p class="card-text">{{ book.description or 'No description available' | truncate(200) }}</p>
+                        <p class="card-text">Author: {{ book.author | default('Unknown') }}</p>
+                        <p class="card-text">Publisher: {{ book.publisher | default('Unknown') }}</p>
+                        <p class="card-text">Published Date: {{ book.published_date | default('Unknown') }}</p>
+                        <p class="card-text">Page Count: {{ book.page_count | default('N/A') }}</p>
+                        <a href="https://books.google.com/books?id={{ book.google_books_id }}" class="btn btn-primary">Preview</a>
+                        {% if book.id in liked_books_ids %}
+                            <form method="POST" action="{{ url_for('unlike_book', book_id=book.id) }}" style="display:inline;">
+                                <button type="submit" class="btn btn-danger">Unlike</button>
+                            </form>
+                        {% else %}
+                            <form method="POST" action="{{ url_for('like_book', book_id=book.id) }}" style="display:inline;">
+                                <button type="submit" class="btn btn-success">Like</button>
+                            </form>
+                        {% endif %}
+                        <a href="{{ url_for('add_review', book_id=book.id) }}" class="btn btn-secondary">Add Review</a>
                     </div>
                 </div>
+            </div>
             {% endfor %}
         </div>
     {% else %}

@@ -2,6 +2,29 @@
 
 {% block content %}
 <div class="row">
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="alert-container">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+            <script>
+                // Auto-dismiss flash messages after 5 seconds
+                setTimeout(function() {
+                    var alerts = document.querySelectorAll('.alert');
+                    alerts.forEach(function(alert) {
+                        alert.classList.remove('show');
+                        alert.classList.add('fade');
+                    });
+                }, 5000);
+            </script>
+        {% endif %}
+    {% endwith %}
+
     <aside class="col-md-4 col-lg-3 col-sm-12" id="home-aside">
         <div class="card user-card">
             <div>
@@ -30,17 +53,22 @@
         <ul class="list-group" id="books">
             {% for book in liked_books %}
             <li class="list-group-item">
-                <a href="https://books.google.com/books?id={{ book.google_books_id }}" target="_blank" class="book-link">
-                    <span class="sr-only">Details for {{ book.title }}</span>
-                    {{ book.title }}
-                </a>
-                <div class="book-info">
-                    <p>Author: {{ book.author }}</p>
-                    <p>Published: {{ book.published_date }}</p>
+                <div class="media">
+                    <img src="{{ book.thumbnail }}" class="mr-3" alt="Book Cover" style="width: 64px; height: auto;" onerror="this.src='{{ url_for('static', filename='images/default_book_cover.jpg') }}?error=true'">
+                    <div class="media-body">
+                        <h5 class="mt-0">
+                            <a href="https://books.google.com/books?id={{ book.google_books_id }}" target="_blank" class="book-link">
+                                <span class="sr-only">Details for {{ book.title }}</span>
+                                {{ book.title }}
+                            </a>
+                        </h5>
+                        <p>Author: {{ book.author }}</p>
+                        <p>Published: {{ book.published_date }}</p>
+                        <form method="POST" action="{{ url_for('unlike_book', book_id=book.id) }}" id="like-book-form" style="display:inline;">
+                            <button class="btn btn-sm btn-primary">Unlike</button>
+                        </form>
+                    </div>
                 </div>
-                <form method="POST" action="{{ url_for('unlike_book', book_id=book.id) }}" id="like-book-form" style="display:inline;">
-                    <button class="btn btn-sm btn-primary">Unlike</button>
-                </form>
             </li>
             {% endfor %}
         </ul>
@@ -49,17 +77,24 @@
         <ul class="list-group" id="reviews">
             {% for review in reviews %}
             <li class="list-group-item">
-                <a href="https://books.google.com/books?id={{ review.book.google_books_id }}" target="_blank" class="book-link">
-                    <span class="sr-only">Details for {{ review.book.title }}</span>
-                    {{ review.book.title }}
-                </a>
-                <p>{{ review.rating }}/5</p>
-                <p>{{ review.text }}</p>
-                <p class="text-muted">Reviewed on {{ review.created_at }}</p>
-                <a href="{{ url_for('edit_review', review_id=review.id) }}" class="btn btn-sm btn-secondary">Edit Review</a>
-                <form method="POST" action="{{ url_for('delete_review', review_id=review.id) }}" style="display:inline;">
-                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                </form>
+                <div class="media">
+                    <img src="{{ review.book.thumbnail }}" class="mr-3" alt="Book Cover" style="width: 64px; height: auto;" onerror="this.src='{{ url_for('static', filename='images/default_book_cover.jpg') }}?error=true'">
+                    <div class="media-body">
+                        <h5 class="mt-0">
+                            <a href="https://books.google.com/books?id={{ review.book.google_books_id }}" target="_blank" class="book-link">
+                                <span class="sr-only">Details for {{ review.book.title }}</span>
+                                {{ review.book.title }}
+                            </a>
+                        </h5>
+                        <p>{{ review.rating }}/5</p>
+                        <p>{{ review.text }}</p>
+                        <p class="text-muted">Reviewed on {{ review.created_at | datetimeformat }}</p>
+                        <a href="{{ url_for('edit_review', review_id=review.id) }}" class="btn btn-sm btn-secondary">Edit Review</a>
+                        <form method="POST" action="{{ url_for('delete_review', review_id=review.id) }}" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
             </li>
             {% endfor %}
         </ul>
